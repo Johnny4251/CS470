@@ -59,7 +59,7 @@ def do_histogram_equalize(image, do_stretching):
     for rows in range(height):
         for columns in range(width):
             value = image[rows, columns]
-            new_value = value * transform_func[value]
+            new_value = transform_func[value]
             output[rows, columns] = new_value
     return output
 
@@ -75,31 +75,15 @@ def main():
     image = cv2.imread(test_image_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     output = do_histogram_equalize(gray, do_stretching=True)
-    #hist = create_unnormalized(image)
-    #normalized_hist = normalize_hist(hist)
-    #cdf = create_cdf(normalized_hist)
 
     cv2.imshow("WINDOW", output)
 
     waitKey = cv2.waitKey()
 
-    # Plot the histogram
-    #plt.bar(range(256), cdf, width=1.0, color='b')
-
-    # Add labels and title
-    #plt.xlabel('Pixel Value')
-    #plt.ylabel('Count')
-    #plt.title('Unnormalized Histogram')
-
-    # Show the plot
-    #plt.show()
-
-    """
     demo = gr.Interface(fn=intensity_callback,
                 inputs=["image", "checkbox"],
                 outputs=["image"])
     demo.launch()
-    """
     
 
 if __name__ == "__main__":
