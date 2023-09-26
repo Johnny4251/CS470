@@ -1,29 +1,62 @@
+"""
+Author: John Pertell
+Date:   10.4.23
+Desc:   This Python application uses OpenCV for histogram equalization on images.
+        The app contains functions to create an unnormalized histogram, a normalized histogram, 
+        a cumulative distribution function (CDF), and perform image transformation.
+"""
+
 import cv2
 import numpy as np
 import gradio as gr
 import matplotlib.pyplot as plt
 
-"""
-This function will take in an image as a parameter and return a
-unormalized histogram of said image. This is assuming the image
-is a gray scale image of shape(height, width) & dtype=uint8
-"""
 def create_unnormalized_hist(image):
-    hist = np.zeros(256, dtype="float32")
+    """
+    Calculate an unnormalized histogram for a grayscale image.
 
+    Param:
+    - image: A grayscale image represented as an array of shape (height, width).
+
+    Returns:
+    - hist: An unnormalized histogram as a numpy array of size 256.
+    """
+    
+    hist = np.zeros(256, dtype="float32")   # Initializing the histogram
+
+    # traversing the image and counting the pixels
+    # for the histogram
     for row in image:
         for pixel_val in row:
             hist[pixel_val] += 1
 
     return hist
 
+
 def normalize_hist(hist):
+    """
+    Calculate the normalized histogram given an unnormalized histogram.
+
+    Args:
+    - hist: A histogram calculated from a grayscale image
+
+    Returns:
+    - normalized_hist: A normalized histogram calculated from hist
+    """
+
+    # computing the normalized hist by summing the unnormal hist(total_count) and dividing it
+    # by the total_count
     total_count = np.sum(hist)
     normalized_hist = hist / total_count
     
     return normalized_hist
 
+"""
+This function takes in a normalized hist and then calculates the cdf based off of the input.
+It then returns the CDF found as a numpy array.
+"""
 def create_cdf(nhist):
+    # initalize the cdf numpy array
     cdf = np.zeros(256, dtype="float32")
     
     cdf[0] = nhist[0]
