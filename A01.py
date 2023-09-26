@@ -24,8 +24,7 @@ def create_unnormalized_hist(image):
     
     hist = np.zeros(256, dtype="float32")   # Initializing the histogram
 
-    # traversing the image and counting the pixels
-    # for the histogram
+    # Count pixel occurrences in the histogram
     for row in image:
         for pixel_val in row:
             hist[pixel_val] += 1
@@ -37,15 +36,14 @@ def normalize_hist(hist):
     """
     Calculate the normalized histogram given an unnormalized histogram.
 
-    Args:
+    Param:
     - hist: A histogram calculated from a grayscale image
 
     Returns:
     - normalized_hist: A normalized histogram calculated from hist
     """
 
-    # computing the normalized hist by summing the unnormal hist(total_count) and dividing it
-    # by the total_count
+    # Normalize the histogram by dividing each bin count by the total pixel count
     total_count = np.sum(hist)
     normalized_hist = hist / total_count
     
@@ -56,9 +54,20 @@ This function takes in a normalized hist and then calculates the cdf based off o
 It then returns the CDF found as a numpy array.
 """
 def create_cdf(nhist):
-    # initalize the cdf numpy array
+    """
+    Calculate the cdf from a normalized histogram.
+
+    Param: 
+    - nhist: A normalized histogram calculated from normaized_hist()
+
+    Returns:
+    - cdf: The cdf of nhist
+    """
+
+    # Initalize the cdf numpy array
     cdf = np.zeros(256, dtype="float32")
     
+    # Calculate the CDF from the normalized histogram
     cdf[0] = nhist[0]
     for i in range(1, 256):
         cdf[i] = cdf[i - 1] + nhist[i]
@@ -66,9 +75,24 @@ def create_cdf(nhist):
     return cdf
 
 def get_hist_equalize_transform(image, do_stretching, do_cl=False, cl_thresh=0):
+    """
+    Gets the hist/equalize/transform from an image. This function also 
+    provides the option to perform stretching. 
+
+    Param: 
+    - image: The image to perform histogram calculations on.
+    - do_stretching: Gives the option to the end user to perform stretching on the histogram.
+
+    Returns:
+    - int_transform: The transform of the cdf.
+    """
+
+    # Create histogram, normalize it, get the CDF
     hist = create_unnormalized_hist(image)
     nhist = normalize_hist(hist)
     cdf = create_cdf(nhist)
+
+    # If histogram stretching is enabled, adjust the CDF values for stretching
     if do_stretching:
         min_val = cdf[0]
         for i in range(len(cdf)):
@@ -84,10 +108,23 @@ def get_hist_equalize_transform(image, do_stretching, do_cl=False, cl_thresh=0):
     return int_transform
 
 def do_histogram_equalize(image, do_stretching):
+    """
+    Creates, normalizes, equalizes, a histogram and provides histogram stretching if asked for. 
+    This function will return an output image from the calculations.
 
+    Param: 
+    - image: The image to perform histogram calculations on.
+    - do_stretching: Gives the option to the end user to perform stretching on the histogram.
+
+    Returns:
+    - output: The output image after histogram calculations and transformation applied.
+    """
+
+    # Initalize the output image and grab the transformation function
     output = np.copy(image)
     transform_func = get_hist_equalize_transform(image, do_stretching)
 
+    # Traversing image, grabbing value and transforming pixels
     height, width = image.shape
     for rows in range(height):
         for columns in range(width):
@@ -103,7 +140,7 @@ def intensity_callback(input_img, do_stretching):
     return output_img
 
 def main():
-
+    # Setting up and launching a GUI enviroment for image histogram equalization
     demo = gr.Interface(fn=intensity_callback,
                 inputs=["image", "checkbox"],
                 outputs=["image"])
