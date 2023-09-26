@@ -71,15 +71,6 @@ def intensity_callback(input_img, do_stretching):
 
 def main():
 
-    test_image_path = "assign01\images\image01.png"
-    image = cv2.imread(test_image_path)
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    output = do_histogram_equalize(gray, do_stretching=True)
-
-    cv2.imshow("WINDOW", output)
-
-    waitKey = cv2.waitKey()
-
     demo = gr.Interface(fn=intensity_callback,
                 inputs=["image", "checkbox"],
                 outputs=["image"])
