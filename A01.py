@@ -9,7 +9,6 @@ Desc:   This Python application uses OpenCV for histogram equalization on images
 import cv2
 import numpy as np
 import gradio as gr
-import matplotlib.pyplot as plt
 
 def create_unnormalized_hist(image):
     """
