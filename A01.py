@@ -48,10 +48,6 @@ def normalize_hist(hist):
     
     return normalized_hist
 
-"""
-This function takes in a normalized hist and then calculates the cdf based off of the input.
-It then returns the CDF found as a numpy array.
-"""
 def create_cdf(nhist):
     """
     Calculate the cdf from a normalized histogram.
