@@ -58,7 +58,8 @@ def apply_filter(image, kernel, alpha=0.125, beta=127, convert_uint8=True):
     padded_image = cv2.copyMakeBorder(image, 
                                       padding_height, padding_height, 
                                       padding_width, padding_width,
-                                      cv2.BORDER_CONSTANT)
+                                      borderType=cv2.BORDER_CONSTANT,
+                                      value=0)
 
     # define the output as a numpy array
     output = np.zeros((image.shape[0], image.shape[1]), dtype="float64")
