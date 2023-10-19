@@ -63,6 +63,7 @@ def apply_filter(image, kernel, alpha=0.125, beta=127, convert_uint8=True):
 
     # define the output as a numpy array
     output = np.zeros((image.shape[0], image.shape[1]), dtype="float64")
+    
 
     # Traversing the image, find pixels and perform
     # calculations based on kernel values
