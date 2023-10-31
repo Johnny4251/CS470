@@ -13,6 +13,7 @@ def image_creation() :
 
     # To add the dimension back
     gray = np.expand_dims(gray, axis=-1)
+    
 
     # To remove the dimension again
     gray = np.squeeze(gray, axis=-1)
