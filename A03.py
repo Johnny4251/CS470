@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-def get_countour(image):
+def prepare_image(image):
 
     image_shape = image.shape
     image = np.reshape(image, (-1, 3)).astype("float32")
@@ -33,10 +33,6 @@ def get_countour(image):
                 else:
                     gray_image[row, col] = 255
     
-            #else:
-                #other_image[row, col] = 255
-    #_, gray_image = cv2.threshold(gray_image, thresh, 255, cv2.THRESH_BINARY)
-
     kernel = np.ones((10, 5), np.uint8)
     gray_image = cv2.erode(gray_image, kernel, iterations=3)
     gray_image = cv2.dilate(gray_image, kernel, iterations=5)
@@ -44,19 +40,21 @@ def get_countour(image):
     return gray_image
 
 def find_WBC(image):
-    
-    white_pixel_coordinates = np.column_stack(np.where(image == 255))
+    new_image = prepare_image(image)
 
+    white_pixel_coordinates = np.column_stack(np.where(new_image == 255))
     if len(white_pixel_coordinates) == 0:
         return []
     
-    print("White Pixel Count: " + str(len(white_pixel_coordinates)))
+    #print("White Pixel Count: " + str(len(white_pixel_coordinates)))
 
-    x_min, y_min = np.min(white_pixel_coordinates, axis=0)
-    x_max, y_max = np.max(white_pixel_coordinates, axis=0)
+    x_min = np.min(white_pixel_coordinates[:, 0])
+    y_min = np.min(white_pixel_coordinates[:, 1])
+    x_max = np.max(white_pixel_coordinates[:, 0])
+    y_max = np.max(white_pixel_coordinates[:, 1])
 
     bounding_boxes = [(x_min, y_min, x_max, y_max)]
-    print(bounding_boxes)
+    #print(bounding_boxes)
     return bounding_boxes
 
 
@@ -70,9 +68,9 @@ def main():
             print("ERROR: Could not open or find the image!")
             exit(1)
 
-        img = get_countour(image)
-        cv2.imshow("img", img)
-        bounding_boxes = find_WBC(img)
+        #img = prepare_image(image)
+        #cv2.imshow("img", img)
+        bounding_boxes = find_WBC(image)
         for box in bounding_boxes:
             x_min, y_min, x_max, y_max = box
             cv2.rectangle(image, (y_min, x_min), (y_max, x_max), (0, 255, 0), 2)
