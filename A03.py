@@ -2,10 +2,11 @@ import numpy as np
 import cv2
 
 def prepare_image(image):
-
-    image_shape = image.shape
-    image = np.reshape(image, (-1, 3)).astype("float32")
-    _, bestLabels, centers = cv2.kmeans(image,
+    
+    kimage = np.copy(image)
+    image_shape = kimage.shape
+    kimage = np.reshape(kimage, (-1, 3)).astype("float32")
+    _, bestLabels, centers = cv2.kmeans(kimage,
                                             K=5,
                                             bestLabels=None,
                                             criteria=(
@@ -40,14 +41,15 @@ def prepare_image(image):
     return gray_image
 
 def find_WBC(image):
-    new_image = prepare_image(image)
+    prepared_image = np.copy(image)
+    new_image = prepare_image(prepared_image)
 
     white_pixel_coordinates = np.column_stack(np.where(new_image == 255))
     if len(white_pixel_coordinates) == 0:
+        print("NO WHITE PIXELS FOUND!")
         return []
     
     #print("White Pixel Count: " + str(len(white_pixel_coordinates)))
-
     x_min = np.min(white_pixel_coordinates[:, 0])
     y_min = np.min(white_pixel_coordinates[:, 1])
     x_max = np.max(white_pixel_coordinates[:, 0])
@@ -60,7 +62,7 @@ def find_WBC(image):
 
 def main():
         filename = "C:\\Users\\Johnny\\Documents\\Suny_Poly\\Coursework\\FALL2023\\CS470\\CS_470_PERTELJ\\CS_470_PERTELJ\\bccd.jpg"
-        #filename = "C:\\Users\\Johnny\\Documents\\Suny_Poly\\Coursework\\FALL2023\\CS470\\CS_470_PERTELJ\\CS_470_PERTELJ\\assign03\output_wbc\\TEST_004.png"
+        filename = "C:\\Users\\Johnny\\Documents\\Suny_Poly\\Coursework\\FALL2023\\CS470\\CS_470_PERTELJ\\CS_470_PERTELJ\\assign03\\output_wbc\\TEST_044.png"
         image = cv2.imread(filename)
         print("Loading image:", filename)
 
@@ -68,18 +70,16 @@ def main():
             print("ERROR: Could not open or find the image!")
             exit(1)
 
-        #img = prepare_image(image)
-        #cv2.imshow("img", img)
+        prepared_image = prepare_image(image)
+        cv2.imshow("Prepared Image", prepared_image)
+
         bounding_boxes = find_WBC(image)
         for box in bounding_boxes:
             x_min, y_min, x_max, y_max = box
-            cv2.rectangle(image, (y_min, x_min), (y_max, x_max), (0, 255, 0), 2)
-
+            cv2.rectangle(image, (y_min, x_min), (y_max, x_max), (0, 0, 255), 2)
         cv2.imshow("PYTHON", image)
         
-
         cv2.waitKey(-1)
-
         cv2.destroyAllWindows()
 
 
