@@ -2,7 +2,8 @@
 Author: John Pertell
 Date:   11.02.2023
 Desc:   This program is made to detect white blood cells from a BCCD dataset.
-        The function find_WBC returns a list of bounding boxes around the cell.
+        The function find_WBC returns a list of bounding boxes around the cell. 
+        See RESULTS_WBC.txt for accuracy information. 
 """
 
 import numpy as np
