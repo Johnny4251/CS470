@@ -169,7 +169,7 @@ def find_WBC(image):
                 box = (x_min, y_min, x_max, y_max)
                 bounding_boxes.append(box)
         
-    # Merging bounding boxe, return the merged list
+    # Merging bounding box, return the merged list
     bounding_boxes = merge_boxes(bounding_boxes)
     return bounding_boxes
 
