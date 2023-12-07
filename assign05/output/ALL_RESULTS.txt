@@ -1,0 +1,74 @@
+****************************************
+APPROACHES: 
+****************************************
+
+* SuperAugNet
+	 A neural network that uses a significant amount of data augmentation for feature extraction.
+   This network has many nodes and uses batch normalization on their inputs.
+
+* SimpleAugNet
+	 A neural network that uses less data augmentation and a lower batch size than SuperAugNet. 
+   This network achieves better generalization and does not use batch normalization. 
+   This network also has less nodes which helps prevent overfitting.
+
+****************************************
+RESULTS:
+****************************************
+APPROACH	TRAINING_accuracy	TRAINING_f1	TESTING_accuracy	TESTING_f1
+SuperAugNet	0.9524	0.9525	0.8560	0.8565
+SimpleAugNet	0.6919	0.6938	0.6688	0.6711
+
+****************************************
+MODEL ARCHITECTURES:
+****************************************
+* SuperAugNet
+SharpenNet(
+  (net_stack): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): ReLU()
+    (6): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): ReLU()
+    (9): MaxPool2d(kernel_size=3, stride=3, padding=0, dilation=1, ceil_mode=False)
+    (10): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (11): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (12): ReLU()
+    (13): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (14): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (15): ReLU()
+    (16): MaxPool2d(kernel_size=3, stride=3, padding=0, dilation=1, ceil_mode=False)
+    (17): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (18): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (19): ReLU()
+    (20): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (21): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (22): ReLU()
+    (23): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (24): Flatten(start_dim=1, end_dim=-1)
+    (25): Linear(in_features=128, out_features=256, bias=True)
+    (26): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (27): Linear(in_features=256, out_features=256, bias=True)
+    (28): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (29): Linear(in_features=256, out_features=10, bias=True)
+  )
+)
+
+* SimpleAugNet
+HFlipNet(
+  (net_stack): Sequential(
+    (0): Conv2d(3, 32, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (1): ReLU()
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=same)
+    (4): ReLU()
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Flatten(start_dim=1, end_dim=-1)
+    (7): Linear(in_features=2048, out_features=128, bias=True)
+    (8): Linear(in_features=128, out_features=10, bias=True)
+  )
+)
+
