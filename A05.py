@@ -208,6 +208,3 @@ def train_model(approach_name, model, device, train_dataloader, test_dataloader)
     # Returning the pretrained model
     return model
     
-            
-            
-
