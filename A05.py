@@ -196,7 +196,7 @@ def train_model(approach_name, model, device, train_dataloader, test_dataloader)
     elif approach_name == "SimpleAugNet":
         total_epochs = 20
     else:
-        total_epochs = 10 # default
+        total_epochs = 5 # default
         
     # Iterating through each epoch
     for epoch in range(total_epochs):
